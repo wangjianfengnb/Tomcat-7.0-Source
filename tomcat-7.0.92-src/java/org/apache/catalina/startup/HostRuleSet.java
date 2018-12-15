@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -88,16 +88,26 @@ public class HostRuleSet extends RuleSetBase {
     @Override
     public void addRuleInstances(Digester digester) {
 
+        // Server/Service/Engine/Host 匹配规则
+
+        // 创建实例StandardHost
         digester.addObjectCreate(prefix + "Host",
                                  "org.apache.catalina.core.StandardHost",
                                  "className");
+        // 设置StandardHost的属性
         digester.addSetProperties(prefix + "Host");
+
+        // 设置classLoader为父类的classload
         digester.addRule(prefix + "Host",
                          new CopyParentClassLoaderRule());
+
+        // 调用StandardHost.addLifecycleListenerRule(HostConfig)
         digester.addRule(prefix + "Host",
                          new LifecycleListenerRule
                          ("org.apache.catalina.startup.HostConfig",
                           "hostConfigClass"));
+
+        // 调用StandEngine.addChild(StandardHost)
         digester.addSetNext(prefix + "Host",
                             "addChild",
                             "org.apache.catalina.Container");

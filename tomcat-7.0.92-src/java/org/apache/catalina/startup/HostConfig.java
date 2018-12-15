@@ -1287,12 +1287,16 @@ public class HostConfig
             Class<?> clazz = Class.forName(host.getConfigClass());
             LifecycleListener listener =
                 (LifecycleListener) clazz.newInstance();
+            // 这里设置了listener，ContextConfig。在后面会回调这里。
             context.addLifecycleListener(listener);
 
             context.setName(cn.getName());
             context.setPath(cn.getPath());
             context.setWebappVersion(cn.getVersion());
             context.setDocBase(cn.getBaseName());
+
+            // 这里把StandContext加入到StandardHost的child中去。然后调用其start方法
+            // 调用了start方法后，会触发事件，然后listener
             host.addChild(context);
         } catch (Throwable t) {
             ExceptionUtils.handleThrowable(t);

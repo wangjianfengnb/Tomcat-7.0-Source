@@ -87,15 +87,23 @@ public class EngineRuleSet extends RuleSetBase {
      */
     @Override
     public void addRuleInstances(Digester digester) {
-        
+
+
+        // Server/Service/Engine
+        // 创建StandardEngine
         digester.addObjectCreate(prefix + "Engine",
                                  "org.apache.catalina.core.StandardEngine",
                                  "className");
+        // 设置StandardEngine的属性
         digester.addSetProperties(prefix + "Engine");
+
+        // 调用StandardEngine.addLifecycleListenerRule(EngineConfig)
         digester.addRule(prefix + "Engine",
                          new LifecycleListenerRule
                          ("org.apache.catalina.startup.EngineConfig",
                           "engineConfigClass"));
+
+        // 调用StandardService.setContainer(StandardEngine)
         digester.addSetNext(prefix + "Engine",
                             "setContainer",
                             "org.apache.catalina.Container");

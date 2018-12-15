@@ -878,17 +878,22 @@ public class ContextConfig implements LifecycleListener {
                     Boolean.valueOf(context.getXmlNamespaceAware())));
         }
 
+        // 主要核心流程在这里
+        // 这里呢，就是说会解析web.xml，然后加载Servlet和Filter
         webConfig();
 
         if (!context.getIgnoreAnnotations()) {
+            // 加载一些注解的配置
             applicationAnnotationsConfig();
         }
         if (ok) {
+            // 什么安全相关的
             validateSecurityRoles();
         }
 
         // Configure an authenticator if we need one
         if (ok)
+            // 鉴权相关的内容
             authenticatorConfig();
 
         // Dump the contents of this pipeline if requested
@@ -1245,9 +1250,12 @@ public class ContextConfig implements LifecycleListener {
          *   those in JARs excluded from an absolute ordering) need to be
          *   scanned to check if they match.
          */
+
+        // 加载默认的web.xml
         Set<WebXml> defaults = new HashSet<WebXml>();
         defaults.add(getDefaultWebXmlFragment());
 
+        // 创建并解析web.xml文件，然后构造成一个webXml对象
         WebXml webXml = createWebXml();
 
         // Parse context level web.xml
@@ -1261,9 +1269,12 @@ public class ContextConfig implements LifecycleListener {
         // Step 1. Identify all the JARs packaged with the application
         // If the JARs have a web-fragment.xml it will be parsed at this
         // point.
+        // 意思就是说加载 应用的jar包
         Map<String,WebXml> fragments = processJarsForWebFragments(webXml);
 
         // Step 2. Order the fragments.
+
+        // 对解析出来的结果排序
         Set<WebXml> orderedFragments = null;
         orderedFragments =
                 WebXml.orderWebFragments(webXml, fragments, sContext);
@@ -1371,6 +1382,8 @@ public class ContextConfig implements LifecycleListener {
 
         // Always need to look for static resources
         // Step 10. Look for static resources packaged in JARs
+        // 扫描一些静态资源什么的。
+
         if (ok) {
             // Spec does not define an order.
             // Use ordered JARs followed by remaining JARs

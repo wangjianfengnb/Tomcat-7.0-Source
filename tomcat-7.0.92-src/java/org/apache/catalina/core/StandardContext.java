@@ -5485,6 +5485,7 @@ public class StandardContext extends ContainerBase
             setLoader(webappLoader);
         }
 
+        // 处理一些字符集什么的
         // Initialize character set mapper
         getCharsetMapper();
 
@@ -5562,6 +5563,7 @@ public class StandardContext extends ContainerBase
                 if ((resources != null) && (resources instanceof Lifecycle))
                     ((Lifecycle) resources).start();
 
+                // 这行代码会触发了ContextConfig加载web.xml，servlet，filter之类的组件
                 // Notify our interested LifecycleListeners
                 fireLifecycleEvent(Lifecycle.CONFIGURE_START_EVENT, null);
 
