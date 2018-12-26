@@ -75,7 +75,6 @@ public class StandardPipeline extends LifecycleBase
      * @param container The container we should be associated with
      */
     public StandardPipeline(Container container) {
-
         super();
         setContainer(container);
 

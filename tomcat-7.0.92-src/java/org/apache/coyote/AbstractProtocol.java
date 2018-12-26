@@ -634,6 +634,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                     } else if (processor.isUpgrade()) {
                         state = processor.upgradeDispatch(status);
                     } else {
+                        // 真正处理请求的地方
                         state = processor.process(wrapper);
                     }
 

@@ -543,6 +543,9 @@ public abstract class AbstractEndpoint<S> {
 
     public void createExecutor() {
         internalExecutor = true;
+        // 自己封装的队列，其实大部分情况下都不会入队。会直接创建新的线程，直到线程池最大线程数
+        // 其实这个队列更改了线程池的逻辑，相当于SynchronousQueue和LinkedQueue的合并
+        // 就是线程会先一直创建，直到线程数量达到最大线程数量，然后才会放入队列中
         TaskQueue taskqueue = new TaskQueue();
         TaskThreadFactory tf = new TaskThreadFactory(getName() + "-exec-", daemon, getThreadPriority());
         executor = new ThreadPoolExecutor(getMinSpareThreads(), getMaxThreads(), 60, TimeUnit.SECONDS,taskqueue, tf);

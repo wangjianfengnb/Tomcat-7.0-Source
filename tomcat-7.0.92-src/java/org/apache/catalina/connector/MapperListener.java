@@ -105,16 +105,22 @@ public class MapperListener extends LifecycleMBeanBase
         // Find any components that have already been initialized since the
         // MBean listener won't be notified as those components will have
         // already registered their MBeans
+        // 找到对应的hostname
         findDefaultHost();
 
+        // 这行代码的意思是找到对应的StandardEngine，然后遍历他以及其子节点，
+        // 添加lifecyclerListener 和 containerListener
         Engine engine = (Engine) connector.getService().getContainer();
         addListeners(engine);
 
+        // 找到StandardEngine的child，然后注册host和context和mapper
+        // 保存在mapperlistener中
         Container[] conHosts = engine.findChildren();
         for (Container conHost : conHosts) {
             Host host = (Host) conHost;
             if (!LifecycleState.NEW.equals(host.getState())) {
                 // Registering the host will register the context and wrappers
+                // 在mapper中注册host,这里面会把context和wrapper都注册进去
                 registerHost(host);
             }
         }

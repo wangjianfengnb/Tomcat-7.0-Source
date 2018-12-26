@@ -132,6 +132,9 @@ final class StandardWrapperValve
         // Allocate a servlet instance to process this request
         try {
             if (!unavailable) {
+                // 初始化两个servlet，
+                // DefaultServlet用来处理静态资源
+                // JspServlet处理jsp页面
                 servlet = wrapper.allocate();
             }
         } catch (UnavailableException e) {

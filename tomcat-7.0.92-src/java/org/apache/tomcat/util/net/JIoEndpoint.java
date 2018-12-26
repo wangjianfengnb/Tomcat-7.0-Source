@@ -304,6 +304,8 @@ public class JIoEndpoint extends AbstractEndpoint<Socket> {
     /**
      * This class is the equivalent of the Worker, but will simply use in an
      * external Executor thread pool.
+     * <p>
+     * 这个东西是负责处理Socket的线程
      */
     protected class SocketProcessor implements Runnable {
 
@@ -328,6 +330,7 @@ public class JIoEndpoint extends AbstractEndpoint<Socket> {
                     SocketState state = SocketState.OPEN;
 
                     try {
+                        // SSL 握手，实际上，默认是no-op的空操作
                         // SSL handshake
                         serverSocketFactory.handshake(socket.getSocket());
                     } catch (Throwable t) {
@@ -340,7 +343,11 @@ public class JIoEndpoint extends AbstractEndpoint<Socket> {
                     }
 
                     if ((state != SocketState.CLOSED)) {
+                        // 第一次请求，state = OPEN ，进入这里
+                        // status 为 null。
                         if (status == null) {
+                            // 第一次请求走这里
+                            // 这里的handler是一个Http11ConnectionHandler
                             state = handler.process(socket, SocketStatus.OPEN_READ);
                         } else {
                             state = handler.process(socket, status);
