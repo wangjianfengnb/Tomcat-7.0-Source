@@ -1270,6 +1270,7 @@ public class ContextConfig implements LifecycleListener {
         // If the JARs have a web-fragment.xml it will be parsed at this
         // point.
         // 意思就是说加载 应用的jar包
+        // 第一步，标识所有的Jar包，如果这个jar包有个fragment.xml文件也会解析
         Map<String,WebXml> fragments = processJarsForWebFragments(webXml);
 
         // Step 2. Order the fragments.
@@ -1280,6 +1281,7 @@ public class ContextConfig implements LifecycleListener {
                 WebXml.orderWebFragments(webXml, fragments, sContext);
 
         // Step 3. Look for ServletContainerInitializer implementations
+        // 第三部：找到ServletContainerInitializer的实现
         if (ok) {
             processServletContainerInitializers();
         }

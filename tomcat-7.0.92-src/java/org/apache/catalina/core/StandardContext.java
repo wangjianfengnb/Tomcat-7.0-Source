@@ -5678,6 +5678,10 @@ public class StandardContext extends ContainerBase
             }
 
             // Configure and call application event listeners
+
+
+           // 这里会构造Listener
+
             if (ok) {
                 if (!listenerStart()) {
                     log.error(sm.getString("standardContext.listenerFail"));
@@ -5697,6 +5701,8 @@ public class StandardContext extends ContainerBase
             }
 
             // Configure and call application filters
+
+           // 这里构造Filter
             if (ok) {
                 if (!filterStart()) {
                     log.error(sm.getString("standardContext.filterFail"));
@@ -5705,6 +5711,7 @@ public class StandardContext extends ContainerBase
             }
 
             // Load and initialize all "load on startup" servlets
+            // 这里会构造servlet
             if (ok) {
                 if (!loadOnStartup(findChildren())){
                     log.error(sm.getString("standardContext.servletFail"));
